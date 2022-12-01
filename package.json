@@ -1,0 +1,22 @@
+{
+  "name": "fab_repo_2",
+  "version": "0.0.1",
+  "description": "nouveau repo pour travailler proprement avec des branches, comme me le conseille Fred",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabrizionastri/fab_repo_2.git"
+  },
+  "keywords": [
+    "plop"
+  ],
+  "author": "Fabrizio Nastri",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabrizionastri/fab_repo_2/issues"
+  },
+  "homepage": "https://github.com/fabrizionastri/fab_repo_2#readme"
+}
