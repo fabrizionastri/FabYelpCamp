@@ -1,0 +1,27 @@
+{
+  "name": "yelpcamp",
+  "version": "0.0.1",
+  "description": "YelpCamp app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fabrizionastri/FabYelpCamp.git"
+  },
+  "keywords": [
+    "YelpCamp"
+  ],
+  "author": "Fabrizio Nastri (coding along with Colt Steele)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fabrizionastri/FabYelpCamp/issues"
+  },
+  "homepage": "https://github.com/fabrizionastri/FabYelpCamp#readme",
+  "dependencies": {
+    "ejs": "^3.1.8",
+    "express": "^4.18.2",
+    "mongoose": "^6.7.5"
+  }
+}

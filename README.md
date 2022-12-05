@@ -1,6 +1,3 @@
 # fab_repo_2
-New repo (dec 2022) without the node_modules
+New repo (dec 2022) for YelpCamp
 
-Hello World !
-
-I love :coffee: :pizza:, and :dancer:.
