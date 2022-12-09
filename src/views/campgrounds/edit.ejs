@@ -1,0 +1,34 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container">
+  <div class="row">
+    <div class="col-8 offset-2 mt-3">
+      <h1>Edit <%= campground.title %></h1>
+      <i>Campground ID: </i>
+    <form action="http://localhost:3000/campgrounds/<%= id %>?_method=PUT " method="POST">
+
+      <label for="title" class="form-label mt-3" >Title </label>
+      <input type="text" class="form-control col-md-4" name="campground[title]" id="title" value="<%=campground.title%>" class="col-sm-6" required >
+
+      <label for="location" class="form-label mt-3">Location </label>
+      <input type="text" class="form-control col-md-4" name="campground[location]" id="location" value="<%=campground.location%>" class="col-sm-6" required >
+
+      <label for="price" class="form-label mt-3">Price</label>
+      <div class="input-group mb-3">
+        <span class="input-group-text">€/night</span>
+        <input type="number" class="form-control col-md-1" id="price" name="campground[price]" min="0" step="1" value="<%=campground.price%>" class="col-sm-1" required>
+        <span class="input-group-text">.00</span>
+      </div>
+
+      <label for="description" class="form-label mt-3">Description </label>
+      <textarea type="text" class="form-control col-md-8" name="campground[description]" id="description"  rows="5" required><%=campground.description%></textarea> 
+
+      <label for="image" class="form-label mt-3">Image </label>
+      <input type="text" class="form-control" name="campground[image]" id="image" value="<%=campground.image%>" class="col-sm-8">
+
+      <button class="btn btn-success my-3" type="submit">Update</button>
+    </form>
+    <div class="mb-3">
+      <a href="http://localhost:3000/campgrounds/<%=id%>" >Back to view</a>
+    </div>
+  </div>

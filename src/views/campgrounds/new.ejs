@@ -1,0 +1,36 @@
+<% layout('layouts/boilerplate') %>
+
+<div class="container">
+  <div class="row">
+    <h1>New campground</h1>
+
+    <div class="col-8 offset-2 mt-3">
+      <form action="http://localhost:3000/campgrounds" method="POST">
+
+        <label for="title" class="form-label mt-3">Title </label>
+        <input class="form-control" type="text" name="campground[title]" id="title" required>
+        
+        <label for="location"class="form-label mt-3">Location </label>
+        <input class="form-control" type="text" name="campground[location]" id="location" required>
+        
+        <label for="price" class="form-label mt-3">Price</label>
+        <div class="input-group mb-3">
+          <span class="input-group-text">€/night</span>
+          <input class="form-control" type="number" id="price" name="campground[price]" min="0" step="1" required>
+          <span class="input-group-text">.00</span>
+        </div>
+
+        <label for="description" class="form-label mt-3">Description </label>
+        <textarea class="form-control" type="text" name="campground[description]" id="description" height="3em" required></textarea>
+        
+        <label for="image" class="form-label mt-3">Image  </label>
+        <input class="form-control" type="text" id="image" name="campground[image]">
+        
+        <div class="my-3">
+          <button class="btn btn-success ">Submit</button>
+        </div>
+      </form>  
+    </div>      
+  </div>
+</div>
+
