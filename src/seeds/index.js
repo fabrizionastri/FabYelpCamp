@@ -7,6 +7,7 @@ const axios = require('axios')
 const https = require('https');
 
 const sample = array => array[Math.floor(Math.random()*array.length)]
+
 const url = "https://api.unsplash.com/photos/random?client_id=kYAVZ2Halw1xhfPIM-N6LRiI31cMtXYLqtDbLgHPqcU&collections=1114848"
 
 console.clear()
@@ -20,38 +21,26 @@ async function  connectDB() {
   .catch((e) => {
     console.log("MongoDB connection ERROR with Mongoose for yelpCamp", e)
   })
-  // const m = await Campground.deleteMany({})
-  // console.log(`sucess: ${m}`)
+  const m = await Campground.deleteMany({})
+  console.log(`sucess: ${m}`)
 }
 
-// Step 2 - get an image
-async function getImg1() {
-  // call unsplash and return small image
-  try {
-    let config = {headers: {Accept:'application/json'}}
-    const resp = await axios.get(url, config)
-    console.log(`Here is the response: ${resp}`)
-    console.log(`Here is the url: ${resp.urls.small}`)
-    return resp.urls.small
-  } catch (err) {
-    console.error(`Fab error:${err}`)
-  }
-}
-
-// Step 3 - get multiple images and save in database
+// Step 2 - get multiple images and save in database
 async function seedDB(iter) {
   await connectDB()
   for (let i = 0 ; i < iter ; i++) {
     // setup
+    // chose one of the following solutions
+    // image: `https://random.imagecdn.app/500/300`,
+    // image: "https://source.unsplash.com/collection/483251",
     const rand_1000 = Math.floor(Math.random()*1000)
+    const img = await getImg2()
+    console.log("tout chaud: ", img)
     const camp = new Campground({
       location: `${cities[rand_1000].city}, ${cities[rand_1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       price: `${Math.floor(Math.random()*100)+10}`,
-      // chose one of the following solutions
-      // image: `https://random.imagecdn.app/500/300`,
-      // image: "https://source.unsplash.com/collection/483251",
-      image: await getImg3(),
+      image: `${img}`,
       description: "Enter your description here 2"
     })
     console.log(`Result for image URL: ${camp.image}`)
@@ -59,39 +48,45 @@ async function seedDB(iter) {
   }  
 }
 
-
-async function getImg2() {
-  fetch(url)
-  // the 'then' (sucess) is triggered as soon as we get a response, 
-  .then(res => {
-    // but initially we only get the headers, before we actually get the body with any real data
-    console.log("RESOLVED fetch() → ", res)
-    console.log("urls.small : ", data.urls.small)
-      return data.urls.small
-  })
-  .catch(e => {
-    console.log("FAILED - ",e)
-  })
+// avec axios.get - try/catch - ne fonctionne pas
+async function getImg1() {
+  // call unsplash and return small image
+  try {
+    // let config = {headers: {Accept:'application/json'}}
+    const resp = await axios.get(url, config)
+    // const ret = await resp.json()
+    console.log(`Here is the response: ${resp}`)
+    // console.log(`Here is the url: ${ret.urls.small}`)
+    return resp
+  } catch (err) {
+    console.error(`Fab error:${err}`)
+  }
 }
 
-// ne fonctionne pas
+// avec fetch - ne fonctionne pas
+async function getImg2() { 
+  const req = await fetch(url)
+  const ret = await req.json()
+  const img = ret.urls.small
+  return img
+}
+
+// avec axios.get / then ne fonctionne pas
 async function getImg3() {
   let data
   let config = {headers: {Accept:'application/json'}}
-  const resp = await axios.get(url, config)
-    .then(function (res) {
+  axios.get(url, config)
+    .then((res) => {
       console.log("→ Axios res: ", res)
       console.log("→ Axios res.data: ", res.data)
       data = res.data
     })
-    .catch(function (error) {
+    .catch((error) => {
       // handle error
-      console.log("→ Got Axios ERROR → ", error);
+      console.log("→ Got Axios ERROR → ", error)
+      throw new Error("Fab Axios Error")
     })
-    .finally(function () {
-      // always executed
-    });
-  console.log("→ resp is finally ")
+  return data
 }
 
 // ne fonctionne pas
@@ -126,3 +121,4 @@ async function getImg5() {
   console.log(data)
   return data;
 };
+seedDB(20)
