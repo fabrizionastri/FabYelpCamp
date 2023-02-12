@@ -3,21 +3,29 @@
 <div class="container">
   <div class="row">
     <h1>New campground</h1>
-
     <div class="col-8 offset-2 mt-3">
-      <form action="http://localhost:3000/campgrounds" method="POST">
-
+      <!-- add novalidate attribute to prevent browser from validating the form, then add a needs-validation class, to run the Bootstrap javascript below -->
+      <form action="http://localhost:3000/campgrounds" method="POST" novalidate class="validated-form">
         <label for="title" class="form-label mt-3">Title </label>
         <input class="form-control" type="text" name="campground[title]" id="title" required>
-        
+        <div class="invalid-feedback">
+          Please provide a title.
+        </div>
+        <div class="valid-feedback">
+          Looks good !
+        </div>
+
         <label for="location"class="form-label mt-3">Location </label>
         <input class="form-control" type="text" name="campground[location]" id="location" required>
-        
+
         <label for="price" class="form-label mt-3">Price</label>
         <div class="input-group mb-3">
           <span class="input-group-text">€/night</span>
           <input class="form-control" type="number" id="price" name="campground[price]" min="0" step="1" required>
           <span class="input-group-text">.00</span>
+        </div>
+        <div class="invalid-feedback">
+          Price must be greater than 0.
         </div>
 
         <label for="description" class="form-label mt-3">Description </label>
@@ -29,8 +37,7 @@
         <div class="my-3">
           <button class="btn btn-success ">Submit</button>
         </div>
-      </form>  
-    </div>      
+      </form>
+    </div>
   </div>
 </div>
-

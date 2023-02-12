@@ -21,38 +21,41 @@ async function  connectDB() {
   .catch((e) => {
     console.log("MongoDB connection ERROR with Mongoose for yelpCamp", e)
   })
-  const m = await Campground.deleteMany({})
-  console.log(`sucess: ${m}`)
+  // const m = await Campground.deleteMany({})
+  // console.log(`sucess: ${m}`)
 }
 
 // Step 2 - get multiple images and save in database
 async function seedDB(iter) {
   await connectDB()
   for (let i = 0 ; i < iter ; i++) {
-    // setup
-    // chose one of the following solutions
-    // image: `https://random.imagecdn.app/500/300`,
-    // image: "https://source.unsplash.com/collection/483251",
     const rand_1000 = Math.floor(Math.random()*1000)
-    const img = await getImg2()
-    console.log("tout chaud: ", img)
+    const img = await getImg1()
+    console.log("Result for image URL:", img)
     const camp = new Campground({
       location: `${cities[rand_1000].city}, ${cities[rand_1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       price: `${Math.floor(Math.random()*100)+10}`,
       image: `${img}`,
-      description: "Enter your description here 2"
+      description: "Enter your description here (with fetch Img1)"
     })
-    console.log(`Result for image URL: ${camp.image}`)
     await camp.save()
   }  
 }
 
+// avec fetch - OK GOOD !!! 
+async function getImg1() { 
+  const req = await fetch(url)
+  const ret = await req.json()
+  const img = ret.urls.small
+  return img
+}
+
 // avec axios.get - try/catch - ne fonctionne pas
-async function getImg1() {
+async function getImg2() {
   // call unsplash and return small image
   try {
-    // let config = {headers: {Accept:'application/json'}}
+    let config = { headers: {Accept:'application/json'}}
     const resp = await axios.get(url, config)
     // const ret = await resp.json()
     console.log(`Here is the response: ${resp}`)
@@ -61,14 +64,6 @@ async function getImg1() {
   } catch (err) {
     console.error(`Fab error:${err}`)
   }
-}
-
-// avec fetch - ne fonctionne pas
-async function getImg2() { 
-  const req = await fetch(url)
-  const ret = await req.json()
-  const img = ret.urls.small
-  return img
 }
 
 // avec axios.get / then ne fonctionne pas
@@ -121,4 +116,44 @@ async function getImg5() {
   console.log(data)
   return data;
 };
-seedDB(20)
+
+
+// from Brandon - long
+async function seedImg6() {
+  try {
+      const resp = await axios.get("https://api.unsplash.com/photos/random", {
+          params: {
+            client_id: "kYAVZ2Halw1xhfPIM-N6LRiI31cMtXYLqtDbLgHPqcU",
+            collections: 1114848,
+            orientation: "landscape",
+            count : 30 //max count allowed by unsplash API
+          },
+          headers: {
+            'Accept': '*/*',
+            'Accept-Encoding': 'gzip, deflate, br',
+            'If-None-Match': 'c523b36f867debdf152790574ec4989b'
+          }
+      });
+      return resp // .data.urls.small;
+  } catch (err) {
+      console.error("Fab ERROR:", err);
+  }
+}
+
+// from Brandon - original
+async function seedImg7() {
+  try {
+    const resp = await axios.get('https://api.unsplash.com/photos/random', {
+      params: {
+        // client_id: '****YOUR CLIENT ID GOES HERE****',
+        client_id: "kYAVZ2Halw1xhfPIM-N6LRiI31cMtXYLqtDbLgHPqcU",
+        collections: 1114848,
+      },
+    })
+    return resp.data.urls.small
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+console.log(seedImg7())

@@ -7,13 +7,20 @@
       <div class="card mb-3" >
         <div class="row">
           <div class="col-md-4">
-            <img src="<%= camp.image %>" class="card-img-top" alt="...">
+            <!-- if the camp.image property contains a valid url that points to an image,
+              then display the image, otherwise display a placeholder image
+             -->
+            <% if (true) { %>
+              <img src="<%= camp.image %>" class="card-img-top" alt="...">
+            <% } else { %>
+              <img src="https://images.unsplash.com/photo-1602520000000-8e8e8e8e8e8e?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FtcG9uZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80" class="card-img-top" alt="...">
+            <% } %>
           </div>
           <div class="col-md-8">
             <h5 class="card-title mt-2 mx-2"><%= camp.title %></h5>
             <p class="card-text mx-2"><%= camp.location %> : <%= camp.price %> €/night</p>
             <p class="card-text mx-2"><%= camp.description %>
-            <p class="text-end mx-2"><a href="/campgrounds/<%= camp._id %>" class="btn btn-primary me-3">Details</a></p>
+            <p class="text-end mx-2"><a href="/campgrounds/<%= camp.id %>" class="btn btn-primary me-3">Details</a></p>
           </div>
         </div>
       </div>
@@ -22,6 +29,19 @@
 <h4>List</h4>
   <ul>
     <% for (let camp of campgrounds) { %> 
-      <li> <b> <%= camp.title %></b>, <%= camp.location %> : <%= camp.price %> €/night <a href="/campgrounds/<%= camp._id %>" style="text-decoration: none"> 👁️‍🗨️</a></li>
+      <li> <b> <%= camp.title %></b>, <%= camp.location %> : <%= camp.price %> €/night <a href="/campgrounds/<%= camp.id %>" style="text-decoration: none"> 👁️‍🗨️</a></li>
     <% } %>
   </ul>
+
+
+<!-- a function that checks that the camp.image:
+  - 1. exists
+  - 2. is valid url
+  - 3. points to an image
+  if all the above conditions are met, then return true, otherwise return false
+ -->
+ <!-- < % function isImage(url) {
+  return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
+} % > -->
+
+

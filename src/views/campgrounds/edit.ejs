@@ -5,10 +5,13 @@
     <div class="col-8 offset-2 mt-3">
       <h1>Edit <%= campground.title %></h1>
       <i>Campground ID: </i>
-    <form action="http://localhost:3000/campgrounds/<%= id %>?_method=PUT " method="POST">
+    <form action="http://localhost:3000/campgrounds/<%= id %>?_method=PUT " method="POST" novalidate class="validated-form">
 
       <label for="title" class="form-label mt-3" >Title </label>
       <input type="text" class="form-control col-md-4" name="campground[title]" id="title" value="<%=campground.title%>" class="col-sm-6" required >
+      <div class="invalid-feedback">
+        Please provide a title.
+      </div>
 
       <label for="location" class="form-label mt-3">Location </label>
       <input type="text" class="form-control col-md-4" name="campground[location]" id="location" value="<%=campground.location%>" class="col-sm-6" required >
@@ -18,7 +21,11 @@
         <span class="input-group-text">€/night</span>
         <input type="number" class="form-control col-md-1" id="price" name="campground[price]" min="0" step="1" value="<%=campground.price%>" class="col-sm-1" required>
         <span class="input-group-text">.00</span>
+        <div class="invalid-feedback">
+          Price must be greater than 0.
+        </div>
       </div>
+
 
       <label for="description" class="form-label mt-3">Description </label>
       <textarea type="text" class="form-control col-md-8" name="campground[description]" id="description"  rows="5" required><%=campground.description%></textarea> 

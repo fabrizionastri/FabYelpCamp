@@ -1,0 +1,80 @@
+<% layout('layouts/boilerplate') %>
+
+  <h1>Check image</h1>
+  <p> Check if an url points to a valid image: </p>
+  <form> <!--  action="/validateImage" method="post" enctype="multipart/form-data"> -->
+    <input type="text" name="image-url" placeholder="Image URL" style="width: 100%; height: 30px; margin-bottom: 10px;"><br>
+    <button> Check URL  </button>
+  </form>
+
+<!-- generate a form that allows the user to enter a url. When the user clicks "Check URL", 
+  then a script contained in this page is exectuted which does the following:
+  1. The url is extracted from the form
+  2. The url is checked if it points to a valid image using the checkImage function that has been imported from the checkImage.js file in the utils folder
+  3. The result of the check is displayed in the browser by adding a paragraph element to the DOM, which contains the result of the url and the result of the check:
+    - If positive, the message is: "The url ${url} points to a valid image: ${result}"
+    - If negative, the message is: "The url ${url} does not point to a valid image: ${result}"  
+  4. The result of the check is also logged to the console
+  5. the form is cleared
+-->
+
+<script>
+  // The script contains a function that checks if a url points to a valid image. The function is an async function that returns a promise. The function uses the fetch API to make a request to the url. The function checks if the response is successful and if the content-type of the response is an image. If the response is not successful or the content-type is not an image, then the function returns false. If the response is successful and the content-type is an image, then the function returns true.
+
+  async function isUrlAnImage(url) {
+    try {
+      const response = await fetch(url, { method: 'HEAD' });
+      const contentType = response.headers.get('content-type');
+      return contentType && contentType.startsWith('image/');
+    } catch (error) {
+      // console.error(error);
+      return false;
+    }
+  }
+
+  const checkImage = async (url) => {
+    if (url && url.length > 0) {
+      const isImage = await isUrlAnImage(url);
+      if (!isImage) {
+        // console.error(`${url} is not a valid image URL.`);
+        return false;
+      }
+    } else {
+      // console.error('URL is not defined or is empty.');
+      return false;
+    }
+    return true;
+  }
+
+  const form = document.querySelector('form');
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const url = document.querySelector('input').value;
+    const result = checkImage(url);
+    const p = document.createElement('p');
+    p.textContent = `The url ${url} points to a valid image: ${result}`;
+    document.querySelector('body').appendChild(p);
+    console.log(`The url ${url} points to a valid image: ${result}`);
+    form.reset();
+  });
+</script>
+
+<!-- The script contains an event listener that listens for the submit event on the form. When the event is triggered, the following happens:
+  1. The default action of the event is prevented
+  2. The url is extracted from the form
+  3. The url is checked if it points to a valid image using the checkImage function that has been imported from the checkImage.js file in the utils folder
+  4. A paragraph element is created and the result of the url and the result of the check is added to the textContent property of the paragraph element
+  5. The paragraph element is added to the body of the document
+  6. The result of the check is logged to the console
+  7. The form is cleared
+
+  The script is added to the page by using the block helper function. The block helper function is used to add content to a block in the layout.ejs file. In this case, the block helper function is used to add a script to the scripts block in the layout.ejs file.
+-->
+
+<%- block('scripts') %>
+  <script src="/js/checkImage.js"></script>
+  
+
+
+
+
