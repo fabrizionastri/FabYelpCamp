@@ -2,8 +2,8 @@
 
   <h1>Campgrounds index</h1>
   
-  <h4>Gallery</h4>
-    <% for (let camp of campgrounds) { %> 
+  <h4 id="gallery">Gallery (see <a href="#list">list</a>)</h4>
+      <% for (let camp of campgrounds) { %> 
       <div class="card mb-3" >
         <div class="row">
           <div class="col-md-4">
@@ -26,10 +26,10 @@
       </div>
     <% } %>
 
-<h4>List</h4>
+<h4 id="list">List (see <a href="#gallery">gallery</a>) </h4>
   <ul>
     <% for (let camp of campgrounds) { %> 
-      <li> <b> <%= camp.title %></b>, <%= camp.location %> : <%= camp.price %> €/night <a href="/campgrounds/<%= camp.id %>" style="text-decoration: none"> 👁️‍🗨️</a></li>
+      <li> <b> <%= camp.title %></b>, <%= camp.location %> : <%= camp.price %> €/night <a href="/campgrounds/<%= camp.id %>" style="text-decoration: none"> 🔍</a></li>
     <% } %>
   </ul>
 

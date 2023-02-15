@@ -7,7 +7,7 @@
       <!-- add novalidate attribute to prevent browser from validating the form, then add a needs-validation class, to run the Bootstrap javascript below -->
       <form action="http://localhost:3000/campgrounds" method="POST" novalidate class="validated-form">
         <label for="title" class="form-label mt-3">Title </label>
-        <input class="form-control" type="text" name="campground[title]" id="title" required>
+        <input class="form-control" type="text" name="campground[title]" id="title" value="blank" required>
         <div class="invalid-feedback">
           Please provide a title.
         </div>
@@ -16,12 +16,12 @@
         </div>
 
         <label for="location"class="form-label mt-3">Location </label>
-        <input class="form-control" type="text" name="campground[location]" id="location" required>
+        <input class="form-control" type="text" name="campground[location]" id="location" value="blank" required>
 
         <label for="price" class="form-label mt-3">Price</label>
         <div class="input-group mb-3">
           <span class="input-group-text">€/night</span>
-          <input class="form-control" type="number" id="price" name="campground[price]" min="0" step="1" required>
+          <input class="form-control" type="number" id="price" name="campground[price]" value="1" min="0" step="1" required>
           <span class="input-group-text">.00</span>
         </div>
         <div class="invalid-feedback">
@@ -29,10 +29,10 @@
         </div>
 
         <label for="description" class="form-label mt-3">Description </label>
-        <textarea class="form-control" type="text" name="campground[description]" id="description" height="3em" required></textarea>
+        <textarea class="form-control" type="text" name="campground[description]" id="description" height="3em" required>Blank</textarea>
         
         <label for="image" class="form-label mt-3">Image  </label>
-        <input class="form-control" type="text" id="image" name="campground[image]">
+        <input class="form-control" type="text" id="image" value="https://images.unsplash.com/photo-1478815716600-15f0c3eb8e4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzODc1NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NzA2MTAwNzQ&ixlib=rb-4.0.3&q=80&w=400" name="campground[image]">
         
         <div class="my-3">
           <button class="btn btn-success ">Submit</button>
