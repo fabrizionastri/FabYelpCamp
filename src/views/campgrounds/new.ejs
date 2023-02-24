@@ -3,11 +3,12 @@
 <div class="container">
   <div class="row">
     <h1>New campground</h1>
+    <p><i> &nbsp; </i></p>
     <div class="col-8 offset-2 mt-3">
-      <!-- add novalidate attribute to prevent browser from validating the form, then add a needs-validation class, to run the Bootstrap javascript below -->
-      <form action="http://localhost:3000/campgrounds" method="POST" novalidate class="validated-form">
+      <form action="/campgrounds" method="POST" class="validated-form" enctype="multipart/form-data" novalidate> <!-- add novalidate attribute to prevent browser from validating the form, then add a needs-validation class, to run the Bootstrap javascript below -->
+
         <label for="title" class="form-label mt-3">Title </label>
-        <input class="form-control" type="text" name="campground[title]" id="title" value="blank" required>
+        <input type="text" class="form-control col-md-4" name="campground[title]" id="title" value="blank" required>
         <div class="invalid-feedback">
           Please provide a title.
         </div>
@@ -15,29 +16,101 @@
           Looks good !
         </div>
 
-        <label for="location"class="form-label mt-3">Location </label>
-        <input class="form-control" type="text" name="campground[location]" id="location" value="blank" required>
+        <label for="location" class="form-label mt-3">Location </label>
+        <input type="text" class="form-control col-md-4" name="campground[location]" id="location" value="10 rue Saint Paul Paris" required>
 
         <label for="price" class="form-label mt-3">Price</label>
         <div class="input-group mb-3">
           <span class="input-group-text">€/night</span>
-          <input class="form-control" type="number" id="price" name="campground[price]" value="1" min="0" step="1" required>
+          <input type="number" class="form-control col-md-1" id="price" name="campground[price]" value="1" min="0" step="1" required>
           <span class="input-group-text">.00</span>
-        </div>
-        <div class="invalid-feedback">
-          Price must be greater than 0.
+          <div class="invalid-feedback">
+            Price must be greater than 0.
+          </div>
         </div>
 
-        <label for="description" class="form-label mt-3">Description </label>
-        <textarea class="form-control" type="text" name="campground[description]" id="description" height="3em" required>Blank</textarea>
-        
-        <label for="image" class="form-label mt-3">Image  </label>
-        <input class="form-control" type="text" id="image" value="https://images.unsplash.com/photo-1478815716600-15f0c3eb8e4b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwzODc1NDZ8MHwxfHJhbmRvbXx8fHx8fHx8fDE2NzA2MTAwNzQ&ixlib=rb-4.0.3&q=80&w=400" name="campground[image]">
-        
-        <div class="my-3">
-          <button class="btn btn-success ">Submit</button>
+        <label for="tinymcetextarea" class="form-label mt-3">Description </label>
+        <textarea  type="text" class="form-control col-md-8" name="campground[description]" id="tinymcetextarea"  rows="5" required>Blank</textarea>
+
+        <div class="">
+          <label for="images" class="form-label mt-3 upload-multiple-label">Upload one or more images </label>
+          <input type="file" name="images" id="images" class="form-control upload-multiple-input" multiple>
         </div>
+
+        <label for="imageUrl" class="form-label mt-3">And / or paste a url link to an image </label>
+        <input type="text" class="form-control col-sm-8" id="imageUrl" value="<%= 'https://res.cloudinary.com/du8f69tr6/image/upload/v1676822348/cld-sample-2.jpg' %>" name="campground[image]">
+        
+        <button class="btn btn-success my-3 ">Submit</button>
       </form>
+      <div class="mb-3">
+        <a href="/campgrounds" >Back to index</a>
+      </div>
     </div>
   </div>
 </div>
+
+<!-- create a script which, when the user enters the location, it automatically sends a request to the geodata route, and displays the results in a dropdown list -->
+
+<!-- <script>
+  // get the location input field
+  const locationInput = document.getElementById('location');
+  // get the dropdown list
+  // const dropdown = document.getElementById('dropdown');
+  // get the form
+  const form = document.querySelector('form');
+
+  // add an event listener to the location input field
+  locationInput.addEventListener('#location', async function(e) {
+    // get the value of the location input field
+    const location = e.target.value;
+    // send a request to the geodata route
+    // const res = await fetch(`/campgrounds/geodata?location=${location}`);
+    // get the data from the response
+    // const data = await res.json();
+    // if there is no data, return
+    const data = "Picopalazzo, rome, italy"
+    // if (!data.length) {
+    //   dropdown.classList.remove('is-active');
+    //   return;
+    // }
+    // if there is data, display the dropdown list
+    // dropdown.classList.add('is-active');
+    // clear the dropdown list
+    // dropdown.innerHTML = '';
+    // loop through the data
+    // for (let item of data) {
+      // create a new dropdown item
+      const option = document.createElement('a');
+      // add a class to the dropdown item
+      option.classList.add('dropdown-item');
+      // add the data to the dropdown item
+      option.innerHTML = item;
+      // add an event listener to the dropdown item
+      option.addEventListener('click', function() {
+        // when the user clicks on the dropdown item, set the value of the location input field to the value of the dropdown item
+        locationInput.value = item;
+        // remove the is-active class from the dropdown list
+        dropdown.classList.remove('is-active');
+      });
+      // append the dropdown item to the dropdown list
+      locationInput.appendChild(option);
+    // }
+  });
+
+  // add an event listener to the form
+  form.addEventListener('submit', function(e) {
+    // get the value of the location input field
+    const location = locationInput.value;
+    // create a new hidden input field
+    const hiddenInput = document.createElement('input');
+    // add a type to the hidden input field
+    hiddenInput.type = 'hidden';
+    // add a name to the hidden input field
+    hiddenInput.name = 'campground[location]';
+    // add a value to the hidden input field
+    hiddenInput.value = location;
+    // append the hidden input field to the form
+    form.appendChild(hiddenInput);
+  });
+</script> -->
+

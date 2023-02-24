@@ -1,50 +1,99 @@
 <% layout('layouts/boilerplate') %>
+<link rel="stylesheet" href="/css/stars.css">
 
 
-<!-- <div class="col-12 offset-1 my-3"> -->
+<!-- First row with title -->
+<div class="row">
+  <h1><%= campground.title %> </h1>
+</div>
 
-  <!-- First row with title -->
-  <div class="row">
-    <h1><%= campground.title %> </h1>
-  </div>
-  
-  <!-- Second row with content -->
-  <div class="row">
-    <!-- First column with campground info -->
-    <div class="col-md-6" id="description">
-      <div class="card mb-3">
-        <img src="<%= campground.image %>"  class="img-fluid" alt="...">
-        <div class="card-body">
-            <h5><b><%= campground.title %></b></h5>
-            <p class="card-text"><%= campground.description %></p>
+<!-- Second row with content -->
+<div class="row">
+  <!-- First column with campground info -->
+  <div class="col-md-6" id="description">
+    <div class="card mb-3">
+
+      <!-- Display all images -->
+      <div id="imagesCarousel" class="carousel slide">
+        <div class="carousel-inner">
+          <!-- < % for (image of campground.images) { %> -->
+          <% campground.images.forEach((img,i) => { %> <!-- this starts with the 1st image active, and then add the others are not active -->
+            <div class="carousel-item <%= i === 0 ? 'active' : '' %>"> <!-- if i is 0, then add active, otherwise add nothing -->
+              <img src="<%= img.url %>" class="d-block w-100" alt="...">
+            </div>  
+          <% }) %>
         </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">Location: <%= campground.location %> <br>
-              Price: <%= campground.price %> €/night<br>
-              Campground ID: <%= campground.id %>
-              Image: <%= campground.image %>
-            </li>
-        <div class="card-body">
-          <a href="/campgrounds/<%= campground.id %>/edit" class="card-link btn btn-info my-3 col-2">  Edit  </a>
-        </div>
-        <div class="card-footer text-muted">
-          <form class="d-inline" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST" id="delete-campground">
-            <button>DELETE</button>
+        <% if (campground.images.length > 1) { %> <!-- only show the buttons if there are images -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#imagesCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#imagesCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        <% } %>
+      </div>
+
+      <!-- <img src="< %= campground.image %>"  class="img-fluid" alt="..."> -->
+      
+      <div class="card-body">
+        <h5><b><%= campground.title %></b></h5>
+        <p class="card-text"><%- campground.description %></p>
+      </div>
+
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"> Location: <%= campground.location %></li>
+        <li class="list-group-item"> Address: <%= campground.address %></li>
+        <li class="list-group-item"> Coordinates: <%= campground.geometry.coordinates %></li>
+        <li class="list-group-item"> Price: <%= campground.price %> €/night</li>
+      </ul>
+
+      <div id='map' style='width: 100%; height: 300px;' ></div> <!-- map container -->
+
+      <% if (currentUser && campground.author.equals(currentUser._id)) { %>
+        <div class="card-body d-flex justify-content-between">
+          <a href="/campgrounds/<%= campground.id %>/edit" class="card-link btn btn-info d-inline" style="width: 100px;">Edit</a>
+          <form class="d-inline=" action="/campgrounds/<%= campground.id %>?_method=DELETE" method="POST" id="delete-campground">
+            <button class="btn btn-outline-secondary" style="width: 100px;">DELETE</button>
           </form>
         </div>
-      </div>
+      <% } %>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item text-muted">Campground ID: <%= campground.id %></li>
+        <li class="list-group-item text-muted">Submitted by: <%- campground.author ? campground.author.username : "Undefined" -%> <br>
+          user id: <%- campground.author ? campground.author.id : "Undefined" -%>  <br>
+          email: <%- campground.author ? campground.author.email : "Undefined" -%>  </li>
+        <li class="list-group-item text-muted">Image: <%= campground.image %></li>
+        <li class="list-group-item text-muted">Images: <%= campground.images %></li>
+      </ul>
     </div>
+  </div>
 
-    <!-- Second column with reviews -->
-    <div class="col-md-6" id="reviews">
-      
-      <h3 class="mt-3">Leave a review</h3>
-      <!-- It is important to add "validated-form" to the class, so that the bootsrap validation rules from the boilerplate is used. Also important to use the novalidate parameter -->
+  <!-- Second column with reviews -->
+  <div class="col-md-6" id="reviews">
+    
+    <h3 >Leave a review</h3>
+    <!-- It is important to add "validated-form" to the class, so that the bootsrap validation rules from the boilerplate is used. Also important to use the novalidate parameter -->
+    <% if (currentUser ) { %>      
       <form action="/campgrounds/<%= campground.id %>/reviews/addreview" method="POST" class="mt-3 validated-form" id="reviewForm" novalidate>
-        <div class="mt-3">
+        <fieldset class="starability-basic">
+          <input type="radio" id="no-rate" class="input-no-rate" name="review[rating]" value="1" checked aria-label="No rating." />
+          <input type="radio" id="first-rate1" name="review[rating]" value="1" />
+          <label for="first-rate1" title="Terrible">1 star</label>
+          <input type="radio" id="first-rate2" name="review[rating]" value="2" />
+          <label for="first-rate2" title="Not good">2 stars</label>
+          <input type="radio" id="first-rate3" name="review[rating]" value="3" />
+          <label for="first-rate3" title="Average">3 stars</label>
+          <input type="radio" id="first-rate4" name="review[rating]" value="4" />
+          <label for="first-rate4" title="Very good">4 stars</label>
+          <input type="radio" id="first-rate5" name="review[rating]" value="5" />
+          <label for="first-rate5" title="Amazing">5 stars</label>
+        </fieldset>
+        <!-- <div class="mt-3">
           <label for="rating">Rating</label>
           <input type="range" name="review[rating]" id="rating" min="1" max="5" step="1" value="5" default="3">
-        </div>
+        </div> -->
         <div> 
           <label for="body" class="form-label">Review</label>
           <textarea class="form-control" name="review[body]" id="body" cols="30" rows="3" required><%= campground.title %> draft review</textarea><br>
@@ -53,42 +102,47 @@
         </div>
         <button class="btn btn-primary">Submit</button>
       </form>
+    <% } else { %>
+      <p class="mt-3">You need to be logged in to leave a review. <a href="/users/login">Login</a> or <a href="/users/register">Register</a></p>
+    <% } %>
 
-      <h3 class="mt-3">Reviews</h3>
-      <div id="review-list">
-        <% for (let review of campground.reviews) { %>
-          <!-- <hr class="mt-0 mb-3"> -->
-          <div class="card my-2 p-2">
-            <div class="row">
-              <div class="col-11">
-                <p class="card-title"><b> Rating: <%= review.rating %> </b> </p>
-                <p class="card-text"><%= review.body %></p>
-                <p></p>
-              </div>
+    <h3 class="mt-3">Reviews</h3>
+    <div id="review-list">
+      <% for (let review of campground.reviews) { %>
+        <!-- <hr class="mt-0 mb-3"> -->
+        <div class="card my-2 p-2">
+          <div class="row">
+            <div class="col-11">
+              <p class="card-title starability-result" data-rating="<%= review.rating %>">Rating: <%= review.rating %> stars</p>
+              <p class="card-text card-subtitle">by: <%= review.author.username ? review.author.username : review.author %></p>
+              <p class="card-text"><%= review.body %></p>
+              <p class="card-text" style="color: lightgrey;">Review id: <%= review.id %></p>
+              
+              <p></p>
+            </div>
+            <% if (currentUser && review.author.equals(currentUser._id)) { %>
               <div class="col-1 px-3">
                 <form  action="/campgrounds/<%= campground.id %>/reviews/<%= review._id %>?_method=DELETE" method="POST" class="d-flex justify-content-end">
                   <button type="submit" class="btn p-0">✕</button>
                 </form>
               </div>
-            </div>
+            <% } %>
           </div>
-        <% } %>
-      </div>
-        <br><br>
+        </div>
+      <% } %>
     </div>
+      <br><br>
   </div>
-<!-- </div> -->
+</div>
 
-<script>
-  document.querySelector('#delete-campground').addEventListener('submit', function(e) {
-    if (!confirm('Are you sure you want to delete this campground?')) {
-      e.preventDefault();
-    }
-  });
-
-  console.log("Campground.image: ", "<%= campground.image %>")
-
+<script> 
+  const mapToken = '<%- process.env.MAPBOX_TOKEN%>'
+  /* WARNIIIINNNNNGGG - This is a vulnerability because we are not escaping HTML, so it some hacker puts a script in one of the campground input field, it could execute */
+  const campground = <%- JSON.stringify(campground) %>
 </script>
+
+<script src="/js/showMap.js"></script>
+
 
 
 

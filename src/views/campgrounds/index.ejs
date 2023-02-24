@@ -1,26 +1,28 @@
 <% layout('layouts/boilerplate') %>
+  <!-- create a div with a border width of 2px and medium grey color -->
+  <div style="border-width: 2px; border-color: rgb(128, 128, 128);">
+    <div id="map" style="width: 100%; height: 500px; "></div>
+  </div>
 
   <h1>Campgrounds index</h1>
   
   <h4 id="gallery">Gallery (see <a href="#list">list</a>)</h4>
-      <% for (let camp of campgrounds) { %> 
+      <% for (let campground of campgrounds) { %> 
       <div class="card mb-3" >
         <div class="row">
           <div class="col-md-4">
-            <!-- if the camp.image property contains a valid url that points to an image,
-              then display the image, otherwise display a placeholder image
-             -->
-            <% if (true) { %>
-              <img src="<%= camp.image %>" class="card-img-top" alt="...">
-            <% } else { %>
-              <img src="https://images.unsplash.com/photo-1602520000000-8e8e8e8e8e8e?ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8Y2FtcG9uZ3xlbnwwfHwwfA%3D%3D&ixlib=rb-1.2.1&w=1000&q=80" class="card-img-top" alt="...">
-            <% } %>
+            <!-- if the campground.images property does not exist, or is empty, or if the property "url" of its first element is empty then display a placeholder image, otherwise display the first image of the array -->
+            <img class="card-img-top" alt="..." src="<%= campground.images && campground.images.length && campground.images[0].url ? campground.images[0].url : 'https://res.cloudinary.com/du8f69tr6/image/upload/v1676822348/cld-sample-2.jpg' %>">
           </div>
           <div class="col-md-8">
-            <h5 class="card-title mt-2 mx-2"><%= camp.title %></h5>
-            <p class="card-text mx-2"><%= camp.location %> : <%= camp.price %> €/night</p>
-            <p class="card-text mx-2"><%= camp.description %>
-            <p class="text-end mx-2"><a href="/campgrounds/<%= camp.id %>" class="btn btn-primary me-3">Details</a></p>
+            <h5 class="card-title mt-2 mx-2"><%= campground.title %></h5>
+            <p class="card-text mx-2"><%= campground.location %> : <%= campground.price %> €/night</p>
+            <p class="card-text mx-2"><%- campground.description %>
+              <p class="card-text mx-2"><%- campground.description %>
+                <p class="card-text mx-2"><%- campground.properties.popUpMarkup%>
+            <p class="card-text mx-2">Author: <%- campground.author ? campground.author.username : "Undefined" -%>
+            <p class="card-text mx-2">Nr of images: <%= campground.images.length%>
+            <p class="text-end mx-2"><a href="/campgrounds/<%= campground.id %>" class="btn btn-primary me-3">Details</a></p>
           </div>
         </div>
       </div>
@@ -28,13 +30,13 @@
 
 <h4 id="list">List (see <a href="#gallery">gallery</a>) </h4>
   <ul>
-    <% for (let camp of campgrounds) { %> 
-      <li> <b> <%= camp.title %></b>, <%= camp.location %> : <%= camp.price %> €/night <a href="/campgrounds/<%= camp.id %>" style="text-decoration: none"> 🔍</a></li>
+    <% for (let campground of campgrounds) { %> 
+      <li> <b> <%= campground.title %></b>, <%= campground.location %> : <%= campground.price %> €/night <a href="/campgrounds/<%= campground.id %>" style="text-decoration: none"> 🔍</a></li>
     <% } %>
   </ul>
 
 
-<!-- a function that checks that the camp.image:
+<!-- a function that checks that the campground.image:
   - 1. exists
   - 2. is valid url
   - 3. points to an image
@@ -44,4 +46,9 @@
   return (url.match(/\.(jpeg|jpg|gif|png)$/) != null);
 } % > -->
 
+<script> 
+  const mapToken = '<%- process.env.MAPBOX_TOKEN%>'
+  const geoData =  { features: <%- JSON.stringify(campgrounds) %> }
+</script>
 
+<script src="/js/clusterMap.js"></script>

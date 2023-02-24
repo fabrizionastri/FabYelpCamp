@@ -1,0 +1,64 @@
+<% layout("/layouts/boilerplate") %>
+
+  <div class="col-8 offset-2 mt-3">
+    <h1>Register</h1>
+    <div class="mt-2">
+
+      <!-- class="form-control" is the magic key word that makes the form looks nice -->
+      <form action="/users/register" method="POST" class="validated-form col-8 offset-2 my-3" novalidate>
+
+        <div>
+          <label for="username"  class="form-label">Username</label>
+          <input type="text" name="username" id="username" class="form-control" required>
+          <div class="invalid-feedback">
+            Please provide a username
+          </div>
+        </div>
+
+        <div>
+          <label for="email"  class="form-label mt-2">Email</label>
+          <input type="email" name="email" id="email" class="form-control" required>
+          <div class="invalid-feedback">
+            Please provide a valid email
+          </div>
+        </div>
+
+        <div>
+          <label for="password"  class="form-label mt-2">Password</label>
+          <input type="password" name="password" id="password" value="123" class="form-control" required>
+          <div class="invalid-feedback">
+            Please provide a password
+          </div>
+        </div>
+
+        <div>
+          <label for="confirmPassword" style="width: 150px" class="form-label mt-2">Confirm password</label>
+          <input type="password" name="confirmPassword" id="confirmPassword" value="123" class="form-control" required>
+          <div class="invalid-feedback">
+            Password does not match
+          </div>
+        </div>
+
+        <button class="btn btn-success mt-3">Register</button>
+
+      </form>
+    </div>
+  </div>
+
+
+  <!-- create a script that will check if the password and confirm password are the same -->
+  <script>
+    const password = document.querySelector('#password');
+    const confirmPassword = document.querySelector('#confirmPassword');
+
+    const validatePassword = () => {
+      if (password.value !== confirmPassword.value) {
+        confirmPassword.setCustomValidity('Passwords do not match');
+      } else {
+        confirmPassword.setCustomValidity('');
+      }
+    }
+
+    password.addEventListener('change', validatePassword);
+    confirmPassword.addEventListener('keyup', validatePassword);
+  </script>

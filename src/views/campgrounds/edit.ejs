@@ -2,40 +2,110 @@
 
 <div class="container">
   <div class="row">
+    <h1>Edit campground: <%= campground.title %></h1>
+    <p><i>Created by: <%= campground.author.username %>, Campground ID: <%= campground._id %></i></p>
     <div class="col-8 offset-2 mt-3">
-      <h1>Edit <%= campground.title %></h1>
-      <i>Campground ID: </i>
-    <form action="http://localhost:3000/campgrounds/<%= id %>?_method=PUT " method="POST" novalidate class="validated-form">
+      <form action="/campgrounds/<%= id %>?_method=PUT " method="POST"  class="validated-form" enctype="multipart/form-data" novalidate>
 
-      <label for="title" class="form-label mt-3" >Title </label>
-      <input type="text" class="form-control col-md-4" name="campground[title]" id="title" value="<%=campground.title%>" class="col-sm-6" required >
-      <div class="invalid-feedback">
-        Please provide a title.
-      </div>
-
-      <label for="location" class="form-label mt-3">Location </label>
-      <input type="text" class="form-control col-md-4" name="campground[location]" id="location" value="<%=campground.location%>" class="col-sm-6" required >
-
-      <label for="price" class="form-label mt-3">Price</label>
-      <div class="input-group mb-3">
-        <span class="input-group-text">€/night</span>
-        <input type="number" class="form-control col-md-1" id="price" name="campground[price]" min="0" step="1" value="<%=campground.price%>" class="col-sm-1" required>
-        <span class="input-group-text">.00</span>
+        <label for="title" class="form-label mt-3">Title </label>
+        <input type="text" class="form-control col-md-4" name="campground[title]" id="title" value="<%=campground.title%>" required >
         <div class="invalid-feedback">
-          Price must be greater than 0.
+          Please provide a title.
         </div>
+        <div class="valid-feedback">
+          Looks good !
+        </div>
+      
+        <label for="location" class="form-label mt-3">Location </label>
+        <input type="text" class="form-control " name="campground[location]" id="location" value="<%=campground.location%>" required >
+      
+        <label for="price" class="form-label mt-3">Price</label>
+        <div class="input-group">
+          <span class="input-group-text">€/night</span>
+          <input type="number" class="form-control col-md-1" id="price" name="campground[price]" min="0" step="1" value="<%=campground.price%>" required>
+          <span class="input-group-text">.00</span>
+          <div class="invalid-feedback">
+            Price must be greater than 0.
+          </div>
+        </div>
+
+        <label for="tinymcetextarea" class="form-label mt-3">Description </label>
+        <textarea type="text" class="form-control col-md-8" name="campground[description]" id="tinymcetextarea"  rows="5" required><%=campground.description%></textarea> 
+
+        <div class="mt-3">
+          <label for="images" class="form-label mt-3 upload-multiple-label">Upload one or more images </label>
+          <input type="file" name="images" id="images" class="form-control upload-multiple-input" multiple>
+        </div>
+
+        <label for="imageUrl" class="form-label mt-3">Add an image via a url link</label>
+        <input type="text" class="form-control col-sm-8" name="image" id="imageUrl" >
+
+        <p class="mt-3">Delete images</p>
+        <div class="row row-cols-1 row-cols-md-4 g-3 mb-3">
+          <% campground.images.forEach((img, i) => { %>
+          <div class="col">
+            <div class="card">
+              <img class="card-img" src="<%= img.thumbnail %>" alt="">
+              <div class="card-img-overlay text-end pt-1 pe-2">
+                <label class="visually-hidden" for="image-<%= i %>">Delete Image</label>
+                <input class="form-check-input" type="checkbox" name="deleteImages[]" value="<%= img.filename %>"  id="image-<%= i %>">
+              </div>
+            </div>
+          </div>
+          <% }) %>
+        </div>
+
+        <button class="btn btn-success my-3" type="submit">Update</button>
+
+      </form>
+
+      <div class="mb-3">
+        <a href="/campgrounds/<%=id%>" >Back to view</a>
       </div>
-
-
-      <label for="description" class="form-label mt-3">Description </label>
-      <textarea type="text" class="form-control col-md-8" name="campground[description]" id="description"  rows="5" required><%=campground.description%></textarea> 
-
-      <label for="image" class="form-label mt-3">Image </label>
-      <input type="text" class="form-control" name="campground[image]" id="image" value="<%=campground.image%>" class="col-sm-8">
-
-      <button class="btn btn-success my-3" type="submit">Update</button>
-    </form>
-    <div class="mb-3">
-      <a href="http://localhost:3000/campgrounds/<%=id%>" >Back to view</a>
     </div>
   </div>
+</div>
+
+
+<div class="gallery">
+
+  <p class="mt-3"><b> Current images</b> <i>(click "✕" to delete)</i></p>
+  <div class="row">
+    <% campground.images.forEach(function(image){ %>
+    <div class="col-4">
+      <div class="position-relative">
+        <img src="<%= image.url %>" alt="<%= image.filename %>" class="img-thumbnail">
+        <a href="/campgrounds/<%= campground._id %>/images/<%= image._id %>/delete" class="fa fa-times fa-2x delete-image position-absolute" aria-hidden="true">✕</a>
+      </div>
+    </div>
+    <% }) %>
+  </div>
+  
+  </div>
+<style>
+  .delete-image {
+    top: 10px; 
+    right: 10px;
+    /* font-weight: bold; */
+    color: rgb(43, 43, 43);
+    background-color: rgba(255, 255, 255, 0.5);
+    padding-top : 1px;
+    padding-bottom: 1px;
+    padding-left : 5px;
+    padding-right: 5px;
+    /* border-radius: 50%; put this to 50% to make it a circle */
+    text-decoration: none;
+  }
+</style>
+
+
+<script>
+  document.querySelector('.delete-image').addEventListener('submit', function(e) {
+    if (!confirm('Are you sure you want to delete this image?')) {
+      e.preventDefault();
+    }
+  });
+
+  console.log("Campground.image: ", "<%= campground.image %>")
+
+</script>

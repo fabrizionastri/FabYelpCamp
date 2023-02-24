@@ -1,10 +1,15 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Joi = require('joi') // validating schema
+const { User } = require('./user') // import review model
 
-const reviewSchema = new Schema ({
+const ReviewSchema = new Schema ({
   body: String,
   rating: Number,
+  author: {
+    type: Schema.Types.ObjectId,
+    ref: 'User'
+  }
 })
 
 const reviewValidator = Joi.object({
@@ -15,11 +20,8 @@ const reviewValidator = Joi.object({
 })
 
 // compile model from schema
-const Review = mongoose.model('Review', reviewSchema)
+const Review = mongoose.model('Review', ReviewSchema)
 
 // export model
-module.exports = { 
-  Review,
-  reviewValidator
-}
+module.exports = { Review, reviewValidator }
 

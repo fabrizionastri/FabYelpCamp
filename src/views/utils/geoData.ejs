@@ -1,0 +1,41 @@
+<% layout('layouts/boilerplate') %>
+
+  <h1>GeoData Forward</h1>
+  <p> Enter an address </p>
+  <form action="/utils/geodata" method="POST" class="mt-3 validated-form" id="geoDataForm" novalidate >
+    <label for="title" class="form-label mt-3">Address </label>
+    <input type="text" class="form-control col-md-4"  name="userInput" placeholder="Enter an address or location" style="width: 50%; height: 30px; margin-bottom: 10px;" value="10 rue Saint Paul Paris"><br>
+    <!-- <button class="btn btn-primary"> Search addresses </button> -->
+  </form>
+
+  <p> Select the desired address </p>
+  <!-- create a form allowing the user to select one place from the places array. The value displayed is "place", the value submitted is the index array -->
+  <form action="/utils/geodata" method="POST" class="mt-3 validated-form" id="geoDataForm" novalidate >
+    <select name="place" id="place" style="width: 80%; height: 30px; margin-bottom: 10px;">
+      <% for (let i = 0; i < places.length; i++) { %>
+        <option value="<%= i %>"><%= places[i] %></option>
+      <% } %>
+    </select><br>
+    <button class="btn btn-primary"> Select </button>
+  </form>
+
+<!-- create an input text field for which, when the user types the enter key, it will automatically submit the form (without having any submit button) -->
+  <!-- <input type="text" name="userInput" id="userInput" style="width: 80%; height: 30px; margin-bottom: 10px;" placeholder="Enter an address or location" value="10 rue Saint Paul Paris"> -->
+
+  <script>
+    // get the form
+    const form = document.getElementById('geoDataForm');
+    // get the input text field
+    const userInput = document.getElementById('userInput');
+    // add an event listener to the userInput text field, that submits the form when the enter key is pressed
+    userInput.addEventListener('keyup', (event) => {
+      // check if the enter key was pressed
+      if (event.keyCode === 13) {
+        // submit the form
+        form.submit();
+      }
+    });
+  </script>
+
+
+

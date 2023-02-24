@@ -2,13 +2,12 @@
 const mongoose = require('mongoose')
 const cities = require('./cities')
 const {places, descriptors} = require('./seedHelpers')
-const Campground = require('../models/campground')
+const { Campground } = require('../models/campground')
+const { Review } = require('../models/review')
 const axios = require('axios')
 const https = require('https');
 
 const sample = array => array[Math.floor(Math.random()*array.length)]
-
-const url = "https://api.unsplash.com/photos/random?client_id=kYAVZ2Halw1xhfPIM-N6LRiI31cMtXYLqtDbLgHPqcU&collections=1114848"
 
 console.clear()
 
@@ -21,8 +20,10 @@ async function  connectDB() {
   .catch((e) => {
     console.log("MongoDB connection ERROR with Mongoose for yelpCamp", e)
   })
-  // const m = await Campground.deleteMany({})
-  // console.log(`sucess: ${m}`)
+  // const c = await Campground.deleteMany({})
+  // const r = await Review.deleteMany({})
+  // console.log(`• sucess Campground.deleteMany : ${c}`)
+  // console.log(`• sucess Review.deleteMany : ${r}`)
 }
 
 // Step 2 - get multiple images and save in database
@@ -30,26 +31,26 @@ async function seedDB(iter) {
   await connectDB()
   for (let i = 0 ; i < iter ; i++) {
     const rand_1000 = Math.floor(Math.random()*1000)
-    const img = await getImg1()
-    console.log("Result for image URL:", img)
+    const img = "https://fastly.picsum.photos/id/236/500/400.jpg?hmac=PHAd3JlI7YLxBTFJBh2VxmleGFQLLv-Wr4VJbfuk4uQ" // await seedImg7()
+    console.log(`Result for image #${i}: ${img}`)
     const camp = new Campground({
+      author: '63ef8864aff4d160c021cdb4', 
       location: `${cities[rand_1000].city}, ${cities[rand_1000].state}`,
       title: `${sample(descriptors)} ${sample(places)}`,
       price: `${Math.floor(Math.random()*100)+10}`,
-      image: `${img}`,
-      description: "Enter your description here (with fetch Img1)"
+      images: [{url: img , filename: 'unsplash random image'}],
+      description: "Enter your description here (with fetch Img7)",
+      geometry: {
+        type: "Point",
+        coordinates: [ cities[rand_1000].longitude, cities[rand_1000].latitude ]
+      }
     })
     await camp.save()
   }  
 }
 
 // avec fetch - OK GOOD !!! 
-async function getImg1() { 
-  const req = await fetch(url)
-  const ret = await req.json()
-  const img = ret.urls.small
-  return img
-}
+
 
 // avec axios.get - try/catch - ne fonctionne pas
 async function getImg2() {
@@ -117,7 +118,6 @@ async function getImg5() {
   return data;
 };
 
-
 // from Brandon - long
 async function seedImg6() {
   try {
@@ -142,18 +142,28 @@ async function seedImg6() {
 
 // from Brandon - original
 async function seedImg7() {
+
   try {
-    const resp = await axios.get('https://api.unsplash.com/photos/random', {
+    const res = await axios.get('https://api.unsplash.com/photos/random', {
       params: {
         // client_id: '****YOUR CLIENT ID GOES HERE****',
         client_id: "kYAVZ2Halw1xhfPIM-N6LRiI31cMtXYLqtDbLgHPqcU",
         collections: 1114848,
-      },
-    })
-    return resp.data.urls.small
+      },      
+    });
+    const arry = res.data.urls.small;
+    console.log("• Axios Response :", arry);
+    return arry
   } catch (err) {
-    console.error(err)
+    console.error("▼ Axios Error:", err)
   }
 }
 
-console.log(seedImg7())
+async function seedImg8() {
+    return "https://random.imagecdn.app/500/150"
+}
+
+
+seedImg7()
+
+seedDB(10)

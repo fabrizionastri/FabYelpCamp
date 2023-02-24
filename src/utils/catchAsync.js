@@ -10,8 +10,8 @@
 
 // Solution 2 - teacher version
 module.exports = fn => {
+  // console.log("calling next() from catchAsync before return")
   return (req, resp, next) => {
-    console.log("calling next() from: catchAsync")
     fn(req, resp, next).catch(next)
   }
 }
