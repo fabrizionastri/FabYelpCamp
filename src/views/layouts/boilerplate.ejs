@@ -10,8 +10,7 @@
 
     <script src="https://cdn.tiny.cloud/1/ya1cutc4mxeeglxwcdrh7u1wyowcvkt9pf11o4u4nb77gmrj/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script> <!-- this is the link to the tinymce script -->
     <script>tinymce.init({selector: '#tinymcetextarea' }); </script> <!-- this is the id of the textarea where we want to use tinymce    -->  
-    <script src='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js'></script>
-
+    <script src='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.js'></script> <!-- this is the link to the mapbox GL JS script to displaying maps in a page-->
     <link href='https://api.mapbox.com/mapbox-gl-js/v2.13.0/mapbox-gl.css' rel='stylesheet'/>
 
   </head>
@@ -41,21 +40,77 @@
         });
       });
 
-      $(".upload-multiple-input").on("change", function () {
-        var files = Array.from(this.files)
-        updatedFiles = files.map(f => { return f.name });
-        for (let i = 0; i < updatedFiles.length; i++) {
-            if (updatedFiles[i].length > 60) {
-                updatedFiles[i] = updatedFiles[i].slice(0, 50).concat(`...${updatedFiles[i].slice(-10)}`)
-            }
-        }
-        var fileName = updatedFiles.join(" <br> ")
-        if (files.length > 1) {
-          var $newElement = $("<div>" + fileName + "</div>")
-          $newElement.addClass("my-2 mx-2 fst-italic")
-          $(this).after($newElement)
-        }
-      });
+      // $(".upload-multiple-input").on("change", function () { // this is the script to displays the list of the name of all the file that are being uploaded
+      //   var files = Array.from(this.files)
+      //   updatedFiles = files.map(f => { return f.name });
+      //   if (updatedFiles.length > 3) 
+      //   {
+      //     updatedFiles = updatedFiles.slice(0, 3).concat(`...${updatedFiles.length - 3} more`)
+      //   } else {
+      //       for (let i = 0; i < updatedFiles.length; i++) {
+      //         if (updatedFiles[i].length > 60) {
+      //             updatedFiles[i] = updatedFiles[i].slice(0, 50).concat(`...${updatedFiles[i].slice(-10)}`)
+      //         }
+      //       }
+      //     var fileName = updatedFiles.join(" <br> ")
+      //     if (files.length > 1) {
+      //       var $newElement = $("<div>" + fileName + "</div>")
+      //       $newElement.addClass("my-2 mx-2 fst-italic")
+      //       $(this).after($newElement)
+      //     }
+      // });
+
+      // this scrit checks how many files are being uploaded in the "".upload-multiple-input" element and displays a message below. If it is more than 3, the message is a red error message. If it is only one, there is no message. If it is between 2 and 3, the message contains the list of the names of the files. Eache this element is changed, the previous message is removed and a new one is created.
+
+      // $(".upload-multiple-input").on("change", function () {
+      //   // the content of the "messages" element is removed
+      //   $(".messages").remove();
+
+      //   var files = Array.from(this.files)
+      //   updatedFiles = files.map(f => { return f.name });
+
+      //   if (updatedFiles.length <= 1) { return }
+
+      //   var $newElement = $("<div>");
+      //   $newElement.addClass("messages");
+
+      //   // if (updatedFiles.length > 3) {
+      //   //   $newElement.text("Cannot upload more than 3 images.");
+      //   //   $newElement.addClass("my-2 mx-2 text-danger");
+      //   //   $("#images").addClass("is-invalid");
+      //   //   $("#images").parent().addClass("form-group has-error");
+      //   //   // $("#mainbutton").prop("disabled", true);
+      //   // } else { 
+      //     for (let i = 0; i < updatedFiles.length; i++) {
+      //       if (updatedFiles[i].length > 60) {
+      //           updatedFiles[i] = updatedFiles[i].slice(0, 50).concat(`...${updatedFiles[i].slice(-10)}`)
+      //       }
+      //     }
+      //     var fileName = updatedFiles.join("<br>");
+      //     $newElement.html(fileName);
+      //     $newElement.addClass("my-2 mx-2 fst-italic");
+      //     $("#images").removeClass("is-invalid");
+      //     $("#images").parent().removeClass("form-group has-error");
+      //     // $("#mainbutton").prop("disabled", false);
+      //   // }
+      //   $(this).after($newElement);
+      // });
+
+      // $('#images').on('change', function() {
+      //   // remove any existing validation state for the images field
+      //   $('#images').removeClass('is-invalid is-valid');
+      //   $('#images-feedback').html('');
+
+      //   var numFiles = $('#images')[0].files.length;
+      //   if (numFiles > 3) {
+      //     $('#images').addClass('is-invalid');
+      //     $('#images-feedback').html('Cannot upload more than 3 images.');
+      //   } else if (numFiles >= 1) {
+      //     $('#images').addClass('is-valid');
+      //     $('#images-feedback').html(numFiles + ' file(s) selected.');
+      //   }
+      // }); 
+
     </script>
   </body>
 </html>

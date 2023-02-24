@@ -34,13 +34,17 @@
 
         <div class="">
           <label for="images" class="form-label mt-3 upload-multiple-label">Upload one or more images </label>
-          <input type="file" name="images" id="images" class="form-control upload-multiple-input" multiple>
+          <input type="file" name="images" id="images" class="form-control upload-multiple-input" multiple minlength="1" maxlength="3">
+          <!-- <div id="messages"></div> -->
+          <div class="invalid-feedback">
+           Cannot upload more than 3 images.
+          </div>
         </div>
 
         <label for="imageUrl" class="form-label mt-3">And / or paste a url link to an image </label>
         <input type="text" class="form-control col-sm-8" id="imageUrl" value="<%= 'https://res.cloudinary.com/du8f69tr6/image/upload/v1676822348/cld-sample-2.jpg' %>" name="campground[image]">
         
-        <button class="btn btn-success my-3 ">Submit</button>
+        <button class="btn btn-success my-3" id="mainbutton">Submit</button>
       </form>
       <div class="mb-3">
         <a href="/campgrounds" >Back to index</a>
@@ -49,68 +53,25 @@
   </div>
 </div>
 
-<!-- create a script which, when the user enters the location, it automatically sends a request to the geodata route, and displays the results in a dropdown list -->
 
-<!-- <script>
-  // get the location input field
-  const locationInput = document.getElementById('location');
-  // get the dropdown list
-  // const dropdown = document.getElementById('dropdown');
-  // get the form
-  const form = document.querySelector('form');
+<!-- a script that a checks the number of images that are being uploaded. If the number of images is more than 3, then the upload will be rejected and an error message will be displayed to the user under the images input, and the submit button will be hidden. It the number of images is equal or less than 3, then the error message will be removed and the submit button will be shown -->
 
-  // add an event listener to the location input field
-  locationInput.addEventListener('#location', async function(e) {
-    // get the value of the location input field
-    const location = e.target.value;
-    // send a request to the geodata route
-    // const res = await fetch(`/campgrounds/geodata?location=${location}`);
-    // get the data from the response
-    // const data = await res.json();
-    // if there is no data, return
-    const data = "Picopalazzo, rome, italy"
-    // if (!data.length) {
-    //   dropdown.classList.remove('is-active');
-    //   return;
-    // }
-    // if there is data, display the dropdown list
-    // dropdown.classList.add('is-active');
-    // clear the dropdown list
-    // dropdown.innerHTML = '';
-    // loop through the data
-    // for (let item of data) {
-      // create a new dropdown item
-      const option = document.createElement('a');
-      // add a class to the dropdown item
-      option.classList.add('dropdown-item');
-      // add the data to the dropdown item
-      option.innerHTML = item;
-      // add an event listener to the dropdown item
-      option.addEventListener('click', function() {
-        // when the user clicks on the dropdown item, set the value of the location input field to the value of the dropdown item
-        locationInput.value = item;
-        // remove the is-active class from the dropdown list
-        dropdown.classList.remove('is-active');
-      });
-      // append the dropdown item to the dropdown list
-      locationInput.appendChild(option);
-    // }
-  });
+<!-- check out the script in the boiler plate.ejs file, which is the parent of this file, to see how the script is called -->
+<!-- 
+<script>
+  const imagesInput = document.querySelector('#images');
+  const imagesInputError = document.querySelector('.upload-multiple-label');
+  const submitButton = document.querySelector('#mainbutton');
 
-  // add an event listener to the form
-  form.addEventListener('submit', function(e) {
-    // get the value of the location input field
-    const location = locationInput.value;
-    // create a new hidden input field
-    const hiddenInput = document.createElement('input');
-    // add a type to the hidden input field
-    hiddenInput.type = 'hidden';
-    // add a name to the hidden input field
-    hiddenInput.name = 'campground[location]';
-    // add a value to the hidden input field
-    hiddenInput.value = location;
-    // append the hidden input field to the form
-    form.appendChild(hiddenInput);
+  imagesInput.addEventListener('change', (e) => {
+    if (e.target.files.length > 3) {
+      imagesInputError.insertAdjacentHTML('afterend', '<p class="text-danger">You can only upload up to 3 images.</p>');
+      // submitButton.disabled = true;
+      submitButton.classList.add('d-none');
+    } else {
+      document.querySelector('.text-danger').remove();
+      // submitButton.disabled = false;
+      submitButton.classList.remove('d-none');
+    }
   });
 </script> -->
-

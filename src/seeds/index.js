@@ -20,10 +20,10 @@ async function  connectDB() {
   .catch((e) => {
     console.log("MongoDB connection ERROR with Mongoose for yelpCamp", e)
   })
-  // const c = await Campground.deleteMany({})
-  // const r = await Review.deleteMany({})
-  // console.log(`• sucess Campground.deleteMany : ${c}`)
-  // console.log(`• sucess Review.deleteMany : ${r}`)
+  const c = await Campground.deleteMany({})
+  const r = await Review.deleteMany({})
+  console.log(`• sucess Campground.deleteMany : ${c}`)
+  console.log(`• sucess Review.deleteMany : ${r}`)
 }
 
 // Step 2 - get multiple images and save in database
@@ -31,7 +31,7 @@ async function seedDB(iter) {
   await connectDB()
   for (let i = 0 ; i < iter ; i++) {
     const rand_1000 = Math.floor(Math.random()*1000)
-    const img = "https://fastly.picsum.photos/id/236/500/400.jpg?hmac=PHAd3JlI7YLxBTFJBh2VxmleGFQLLv-Wr4VJbfuk4uQ" // await seedImg7()
+    const img = await seedImg7() // "https://fastly.picsum.photos/id/236/500/400.jpg?hmac=PHAd3JlI7YLxBTFJBh2VxmleGFQLLv-Wr4VJbfuk4uQ"
     console.log(`Result for image #${i}: ${img}`)
     const camp = new Campground({
       author: '63ef8864aff4d160c021cdb4', 
@@ -166,4 +166,4 @@ async function seedImg8() {
 
 seedImg7()
 
-seedDB(10)
+seedDB(5)

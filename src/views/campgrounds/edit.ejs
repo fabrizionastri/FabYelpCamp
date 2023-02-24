@@ -35,6 +35,10 @@
         <div class="mt-3">
           <label for="images" class="form-label mt-3 upload-multiple-label">Upload one or more images </label>
           <input type="file" name="images" id="images" class="form-control upload-multiple-input" multiple>
+          <!-- <div id="messages"></div> -->
+          <div class="invalid-feedback">
+            Cannot upload more than 3 images.
+           </div>
         </div>
 
         <label for="imageUrl" class="form-label mt-3">Add an image via a url link</label>
@@ -108,4 +112,23 @@
 
   console.log("Campground.image: ", "<%= campground.image %>")
 
+</script>
+
+<script>
+  const imagesInput = document.getElementById('images');
+  imagesInput.addEventListener('change', (event) => {
+    const selectedFiles = event.target.files;
+    const invalidFeedback = document.querySelector('#images ~ .invalid-feedback');
+    // if (selectedFiles.length === 0) {
+    //   imagesInput.setCustomValidity('Please select at least one image.');
+    //   invalidFeedback.textContent = 'Please select at least one image.';
+    // } else 
+    if (selectedFiles.length > 3) {
+      imagesInput.setCustomValidity('You can select up to three images only.');
+      invalidFeedback.textContent = 'You can select up to three images only.';
+    } else {
+      imagesInput.setCustomValidity('');
+      invalidFeedback.textContent = 'Cannot upload more than 3 images.';
+    }
+  });
 </script>

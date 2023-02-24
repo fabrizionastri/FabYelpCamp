@@ -46,13 +46,11 @@ app.use(express.urlencoded({ extended: true })) // To parse incoming URL-encoded
 app.use(express.json()) // To parse incoming JSON requests. Important : if you do not do this, you won't be able to get data from a POST request body
 app.use(methodOverride('_method')) // To parse incoming PUT and DELETE requests, which are normally not allowed in HTML forms. This requires  to use _method in the form action to 'fake' put/patch/delete requests as a POST request
 
+mongoose.set('strictQuery', false);
 
-const dbCloud = process.env.MONGODB_URI // my MongoDB Atlas connection string
-const dbLocal ='mongodb://127.0.0.1:27017/yelpCamp' // my local MongoDB connection string
-const dbUrl = dbLocal // choose the database to use
 
 const store = MongoStore.create({ // store session in MongoDB
-  mongoUrl: dbUrl,
+  mongoUrl: process.env.DB_URL,
   crypto: {
     secret: 'asquirreliseatingnuts'
   },
@@ -80,7 +78,7 @@ const sessionConfig = {
 
 app.use(session(sessionConfig)) // use session middleware
 
-mongoose.connect(dbUrl)
+mongoose.connect(process.env.DB_URL)
   .then((m) => {
     console.log("• MongoDB connection OPEN with Mongoose for yelpCamp")
   })

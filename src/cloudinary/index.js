@@ -15,7 +15,7 @@ const storage = new CloudinaryStorage({ // configure cloudinary storage with you
   cloudinary: cloudinary, // use the cloudinary object created above
   params: {
     folder: 'yelpCamp', // The name of the folder in the cloudinary cloud
-    allowedFormats: ['jpeg', 'png', 'jpg', 'svg'], // The allowed formats of the image 
+    // allowedFormats: ['jpeg', 'png', 'jpg', 'svg'], // The allowed formats of the image 
     transformation: [ // The transformation of the image
         { width: 800, height: 600, gravity: "auto", crop: "fill" }, // The width, height, gravity and crop of the image
     ], 
