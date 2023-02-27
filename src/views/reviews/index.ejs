@@ -11,10 +11,10 @@
         <div class="col-11">
           <span class="card-text inline-block"> <a href="/campgrounds/<%= review.campgroundId %>" style="text-decoration: none"> <%= review.campgroundTitle%> </a> : <%= review.body %> (ID: 
             <!-- if review.author.username exists, show it, else show review.author.username -->
-            <%= review.author.username ? review.author.username : review.author %> )</span>
+            <%= review.author ? review.author.username : "- no author -" %> )</span>
             <span class="card-title starability-result inline-block" data-rating="<%= review.rating %>">Rating: <%= review.rating %> stars</span>
         </div>
-        <% if (currentUser && review.author.equals(currentUser._id)) { %>
+        <% if (currentUser && review.author && review.author.equals(currentUser._id)) { %>
           <div class="col-1 px-3">
             <a href="/campgrounds/<%= review.campgroundId %>" style="text-decoration: none">✏️</a>
             <a href="/reviews/<%= review.id %>/delete" style="text-decoration: none">🗑️</a>
